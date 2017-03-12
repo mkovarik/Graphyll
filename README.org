@@ -15,9 +15,9 @@ Graphyll should be used for incremental builds. This means tasks are
 only executed if relevant changes have been made. This can provide
 significant performance boosts for most workflows.
 
-Enabling such incremental builds requires a cached TOML file from which
-to be read and (optionally) a cached TOML file from which to be written.
-They are usually the same file.
+Enabling such incremental builds requires a cached TOML file that will
+be read and (optionally) a cached TOML file that will be written. They
+will usually be the same file.
 
 #+BEGIN_SRC
 $ graphyll task_list.toml -r cache.toml -w cache.toml
