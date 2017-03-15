@@ -1,0 +1,12 @@
+[package]
+name    = "graphyll"
+version = "0.0.0"
+authors = ["Michael Kovarik <michaelkovarik@outlook.com>"]
+
+[lib]
+name = "graphyll"
+path = "src/graphyll.rs"
+
+[[bin]]
+name = "graphyll"
+path = "src/main.rs"
