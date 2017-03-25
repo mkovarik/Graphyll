@@ -10,3 +10,6 @@ path = "src/graphyll.rs"
 [[bin]]
 name = "graphyll"
 path = "src/main.rs"
+
+[dependencies]
+yaml-rust = "*"
