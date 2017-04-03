@@ -1,17 +1,21 @@
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_yaml;
 use std::collections::{HashSet, HashMap};
 
 // A Node struct describes a step in the build process.
-#[derive(Eq, PartialEq, Hash)]
+#[derive(Eq, PartialEq, Hash, Serialize, Deserialize, Debug)]
 struct Node {
-    id : i32,
+    commands: Vec<String>,
     dependencies: Vec<String>,
     targets: Vec<String>,
 }
 impl Node {
     fn process(&self) {
-        println!("Node {} processed", self.id);
+        println!("{:?}", &self);
     }
 }
+#[derive(Serialize, Deserialize)]
 struct Graph {
     nodes : Vec<Node>,
 }
@@ -31,10 +35,24 @@ impl Graph {
         }
         neighbors
     }
+    fn has_prereq(&self, node: &Node) -> bool {
+        for neighbor in &self.nodes {
+            for targ in &neighbor.targets {
+                for dep in &node.dependencies {
+                    if targ == dep {
+                        return true;
+                    }
+                }
+            }
+        }
+        false
+    }
     fn process(&self) {
-        let mut visited_nodes = HashSet::new();
+        let mut visited_nodes : HashSet<&Node> = HashSet::new();
         for node in &self.nodes {
-            visited_nodes.insert(node);
+            if !(self.has_prereq(node)) {
+                self.traverse(node, &mut visited_nodes);
+            }
         }
     }
     fn traverse<'a>(&'a self, root : &'a Node, 
@@ -49,6 +67,27 @@ impl Graph {
         }
     }
 }
+
 pub fn test() {
-    println!("butt hammer");
+    println!("Running test");
+    let s: String = String::from(
+"
+nodes:
+    - commands:
+        - Executing Node 1
+      dependencies:
+        - B
+      targets:
+        - C
+    - commands:
+          - Executing Node 2
+      dependencies:
+        - A
+      targets:
+        - B
+"
+
+);
+let deserialized: Graph = serde_yaml::from_str(&s).unwrap();
+deserialized.process();
 }
