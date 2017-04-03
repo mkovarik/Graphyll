@@ -12,4 +12,6 @@ name = "graphyll"
 path = "src/main.rs"
 
 [dependencies]
-yaml-rust = "*"
+serde = "*"
+serde_derive = "*"
+serde_yaml = "*"
