@@ -17,17 +17,17 @@ impl Node {
 }
 #[derive(Serialize, Deserialize)]
 struct Graph {
-    nodes : Vec<Node>,
+    nodes: Vec<Node>,
 }
 impl Graph {
-    fn adj_nodes(&self, node : &Node) -> Vec<&Node> {
+    fn adj_nodes(&self, node: &Node) -> Vec<&Node> {
         let mut neighbors = Vec::new();
         for neighbor in &self.nodes {
             let dependencies = &neighbor.dependencies;
             let targets = &node.targets;
-            let dep_set : HashSet<_> = dependencies.iter().collect();
-            let targ_set : HashSet<_> = targets.iter().collect();
-            let intersect : HashSet<_>;
+            let dep_set: HashSet<_> = dependencies.iter().collect();
+            let targ_set: HashSet<_> = targets.iter().collect();
+            let intersect: HashSet<_>;
             intersect = dep_set.intersection(&targ_set).collect();
             if intersect.len() > 0 {
                 neighbors.push(neighbor);
@@ -48,15 +48,14 @@ impl Graph {
         false
     }
     fn process(&self) {
-        let mut visited_nodes : HashSet<&Node> = HashSet::new();
+        let mut visited_nodes: HashSet<&Node> = HashSet::new();
         for node in &self.nodes {
             if !(self.has_prereq(node)) {
                 self.traverse(node, &mut visited_nodes);
             }
         }
     }
-    fn traverse<'a>(&'a self, root : &'a Node, 
-                visited_nodes : &mut HashSet<&'a Node>) {
+    fn traverse<'a>(&'a self, root: &'a Node, visited_nodes: &mut HashSet<&'a Node>) {
         if visited_nodes.contains(root) {
             return;
         }
@@ -70,8 +69,7 @@ impl Graph {
 
 pub fn test() {
     println!("Running test");
-    let s: String = String::from(
-"
+    let s: String = String::from("
 nodes:
     - commands:
         - Executing Node 1
@@ -85,9 +83,7 @@ nodes:
         - A
       targets:
         - B
-"
-
-);
-let deserialized: Graph = serde_yaml::from_str(&s).unwrap();
-deserialized.process();
+");
+    let deserialized: Graph = serde_yaml::from_str(&s).unwrap();
+    deserialized.process();
 }
